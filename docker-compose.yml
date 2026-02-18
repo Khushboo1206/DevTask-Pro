@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+
+  backend:
+    build: .
+    container_name: devtask_backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/taskdb
+
+  frontend:
+    build: ./task-frontend
+    container_name: devtask_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
